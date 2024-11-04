@@ -68,6 +68,7 @@ jobs:
           name: BetterF3 v${{ env.mod_version }}
           target_commitish: ${{ github.sha }}
           files: |
+            **/build/lobs/BetterF3-*-NeoForge-*.jar
             **/build/libs/BetterF3-*-Fabric-*.jar
             **/build/libs/BetterF3-*-Forge-*.jar
 
@@ -80,12 +81,3 @@ jobs:
           MODRINTH_TOKEN: ${{ secrets.TREY_MODRINTH_API_KEY }}
         with:
             arguments: publish publishUnified --stacktrace
-      - name: Release Version to 3rd Parties
-        uses: gradle/gradle-build-action@v2
-        if: ${{ github.event.inputs.release && github.triggering_actor == 'cominixo' }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CURSE_API_KEY: ${{ secrets.CURSE_API_KEY }}
-          MODRINTH_TOKEN: ${{ secrets.MODRINTH_API_KEY }}
-        with:
-          arguments: publish publishUnified --stacktrace
