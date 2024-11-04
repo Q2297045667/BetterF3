@@ -68,7 +68,7 @@ jobs:
           name: BetterF3 v${{ env.mod_version }}
           target_commitish: ${{ github.sha }}
           files: |
-            **/build/lobs/BetterF3-*-NeoForge-*.jar
+            **/build/libs/BetterF3-*-NeoForge-*.jar
             **/build/libs/BetterF3-*-Fabric-*.jar
             **/build/libs/BetterF3-*-Forge-*.jar
 
