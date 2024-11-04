@@ -10,7 +10,7 @@ import me.cominixo.betterf3.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ObjectSelectionList;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -192,24 +192,23 @@ public class ModuleListWidget extends ObjectSelectionList<ModuleListWidget.Modul
       if (this.client.options.touchscreen().get() || hovered) {
         //RenderSystem.setShaderTexture(0, new Identifier("textures/gui/server_selection.png"));
         context.fill(x, y, x + 32, y + 32, -1601138544);
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         final int v = mouseX - x;
         final int w = mouseY - y;
 
         if (index > 0) {
           if (v < 16 && w < 16) {
-            context.blitSprite(ResourceLocation.parse("server_list/move_up_highlighted"), x, y, 32, 32);
+            context.blitSprite(RenderType::guiTextured, ResourceLocation.parse("server_list/move_up_highlighted"), x, y, 32, 32);
           } else {
-            context.blitSprite(ResourceLocation.parse("server_list/move_up"), x, y, 32, 32);
+            context.blitSprite(RenderType::guiTextured, ResourceLocation.parse("server_list/move_up"), x, y, 32, 32);
           }
         }
 
         if (index < ModuleListWidget.this.moduleEntries.size() - 1) {
           if (v < 16 && w > 16) {
-            context.blitSprite(ResourceLocation.parse("server_list/move_down_highlighted"), x, y, 32, 32);
+            context.blitSprite(RenderType::guiTextured, ResourceLocation.parse("server_list/move_down_highlighted"), x, y, 32, 32);
           } else {
-            context.blitSprite(ResourceLocation.parse("server_list/move_down"), x, y, 32, 32);
+            context.blitSprite(RenderType::guiTextured, ResourceLocation.parse("server_list/move_down"), x, y, 32, 32);
           }
         }
       }

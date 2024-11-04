@@ -4,9 +4,9 @@ import me.cominixo.betterf3.utils.DebugLine;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.CloudStatus;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.PostChain;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -42,7 +42,7 @@ public class GraphicsModule extends BaseModule {
     ".betterf3.line.off")
     : (client.options.cloudStatus().get() == CloudStatus.FAST ? I18n.get("text.betterf3.line.fast") :
     I18n.get("text" +
-    ".betterf3.line.fancy") );
+    ".betterf3.line.fancy"));
 
     // Render Distance
     lines.get(0).value(client.levelRenderer.lastViewDistance);
@@ -54,9 +54,9 @@ public class GraphicsModule extends BaseModule {
     lines.get(3).value(client.options.biomeBlendRadius().get());
 
     // Shader
-    final PostChain shaderEffect = client.gameRenderer.currentEffect();
+    final ResourceLocation shaderEffect = client.gameRenderer.currentPostEffect();
     if (shaderEffect != null) {
-      lines.get(4).value(shaderEffect.getName());
+      lines.get(4).value(String.valueOf(shaderEffect));
     } else {
       lines.get(4).active = false;
     }

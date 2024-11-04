@@ -25,8 +25,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,11 +43,17 @@ public class BetterF3Forge {
   // Directly references a log4j logger.
   private static final Logger LOGGER = LogManager.getLogger();
 
+  // The mod loading context
+  private static FMLJavaModLoadingContext modLoadingContext;
+
   /**
    * Instantiates a new Better F3 mod for Forge.
+   *
+   * @param modLoadingContext the mod loading context
    */
-  public BetterF3Forge() {
+  public BetterF3Forge(final FMLJavaModLoadingContext modLoadingContext) {
     LOGGER.info("[BetterF3] Starting...");
+    BetterF3Forge.modLoadingContext = modLoadingContext;
 
     if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
       LOGGER.warn("[BetterF3] Not supported on dedicated server!");
@@ -64,11 +70,11 @@ public class BetterF3Forge {
       MinecraftForge.EVENT_BUS.register(BetterF3Forge.class);
       // Make sure the mod being absent on the other network side does not cause the client to display the server
       // as incompatible.
-      ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> IGNORESERVERONLY, (a, b) -> true));
+      modLoadingContext.registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> IGNORESERVERONLY, (a, b) -> true));
 
       // Sets up Cloth Config if it is installed
       if (ModList.get().isLoaded("cloth_config"))
-        ForgeModMenu.registerModsPage();
+        ForgeModMenu.registerModsPage(modLoadingContext);
       else LOGGER.info(I18n.get("config.betterf3.need_cloth_config"));
     }
 

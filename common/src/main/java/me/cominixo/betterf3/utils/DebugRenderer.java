@@ -17,7 +17,7 @@ import me.cominixo.betterf3.modules.MiscRightModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
@@ -51,7 +51,7 @@ public final class DebugRenderer {
     final float g = (float) (GeneralOptions.backgroundColor >> 16 & 255) / 255.0F;
     final float h = (float) (GeneralOptions.backgroundColor >> 8 & 255) / 255.0F;
     final float k = (float) (GeneralOptions.backgroundColor & 255) / 255.0F;
-    RenderSystem.setShader(GameRenderer::getPositionColorShader);
+    RenderSystem.setShader(CoreShaders.POSITION_COLOR);
     final BufferBuilder bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
     RenderSystem.enableBlend();
     RenderSystem.defaultBlendFunc();
@@ -105,10 +105,10 @@ public final class DebugRenderer {
         y2 = j;
       }
 
-      bufferBuilder.addVertex(matrix, (float) x1, (float) y2, 0.0F).setColor(g, h, k, f);
-      bufferBuilder.addVertex(matrix, (float) x2, (float) y2, 0.0F).setColor(g, h, k, f);
-      bufferBuilder.addVertex(matrix, (float) x2, (float) y1, 0.0F).setColor(g, h, k, f);
-      bufferBuilder.addVertex(matrix, (float) x1, (float) y1, 0.0F).setColor(g, h, k, f);
+      bufferBuilder.addVertex(matrix, x1, y2, 0.0F).setColor(g, h, k, f);
+      bufferBuilder.addVertex(matrix, x2, y2, 0.0F).setColor(g, h, k, f);
+      bufferBuilder.addVertex(matrix, x2, y1, 0.0F).setColor(g, h, k, f);
+      bufferBuilder.addVertex(matrix, x1, y1, 0.0F).setColor(g, h, k, f);
 
     }
     try {
@@ -136,7 +136,7 @@ public final class DebugRenderer {
                                    final Font font, @Nullable final List<String> additional) {
 
     if (additional != null) {
-      additional.forEach((text) -> list.add(Component.nullToEmpty(text)));
+      additional.forEach(text -> list.add(Component.nullToEmpty(text)));
     }
 
     final MultiBufferSource.BufferSource immediate = immediate(minecraft, font, PositionEnum.RIGHT, list, context.pose());
@@ -173,7 +173,7 @@ public final class DebugRenderer {
                                   final GuiGraphics context, final Minecraft minecraft,
                                   final Font font, @Nullable final List<String> additional) {
     if (additional != null) {
-      additional.forEach((text) -> list.add(Component.nullToEmpty(text)));
+      additional.forEach(text -> list.add(Component.nullToEmpty(text)));
     }
     final MultiBufferSource.BufferSource immediate = immediate(minecraft, font, PositionEnum.LEFT, list, context.pose());
 

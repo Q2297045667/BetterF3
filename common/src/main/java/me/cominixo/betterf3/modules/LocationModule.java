@@ -85,7 +85,7 @@ public class LocationModule extends BaseModule {
       final ChunkPos chunkPos = new ChunkPos(blockPos);
 
       // Biome
-      lines.get(7).value(client.level.registryAccess().registryOrThrow(Registries.BIOME).getKey(client.level.getBiome(blockPos).value()));
+      lines.get(7).value(client.level.registryAccess().lookupOrThrow(Registries.BIOME).getKey(client.level.getBiome(blockPos).value()));
 
       serverWorld = integratedServer != null ? integratedServer.getLevel(client.level.dimension()) : client.level;
       final LevelChunk clientChunk = client.level.getChunk(chunkPos.x, chunkPos.z);
@@ -112,11 +112,11 @@ public class LocationModule extends BaseModule {
 
         LevelChunk serverChunk;
 
-        if (serverWorld instanceof ServerLevel) {
+        if (serverWorld instanceof ServerLevel serverLevel) {
           if (this.chunkFuture == null) {
             this.chunkFuture =
-            ((ServerLevel) serverWorld).getChunkSource().getChunkFuture(chunkPos.x, chunkPos.z, ChunkStatus.FULL, false)
-              .thenApply((chunkResult) -> (LevelChunk) chunkResult.orElse(null));
+            serverLevel.getChunkSource().getChunkFuture(chunkPos.x, chunkPos.z, ChunkStatus.FULL, false)
+            .thenApply(chunkResult -> (LevelChunk) chunkResult.orElse(null));
           }
 
           if (this.chunkFuture == null) {
@@ -169,7 +169,7 @@ public class LocationModule extends BaseModule {
 
         if (integratedServer != null) {
           final RandomSource slimeChunk = WorldgenRandom.seedSlimeChunk(chunkPos.x, chunkPos.z, ((WorldGenLevel) serverWorld).getSeed(), 0x3ad8025fL);
-          slimeChunkString = String.format("%s", I18n.get((slimeChunk.nextInt(10) == 0 ) ? "text.betterf3.line.slime_chunk.true" : "text.betterf3.line.slime_chunk.false"));
+          slimeChunkString = String.format("%s", I18n.get((slimeChunk.nextInt(10) == 0) ? "text.betterf3.line.slime_chunk.true" : "text.betterf3.line.slime_chunk.false"));
         } else {
           slimeChunkString = String.format("%s", I18n.get("text.betterf3.line.slime_chunk.unknown"));
         }
@@ -204,10 +204,12 @@ public class LocationModule extends BaseModule {
 
     // Local Difficulty
     lines.get(8).value(localDifficultyString);
-    // Ticks in the day
-    lines.get(9).value(Long.valueOf(client.level.getDayTime() % 24000L).intValue());
-    // Days played
-    lines.get(10).value(client.level.getDayTime() / 24000L);
+    if (client.level != null) {
+      // Ticks in the day
+      lines.get(9).value(client.level.getDayTime() % 24000L);
+      // Days played
+      lines.get(10).value(client.level.getDayTime() / 24000L);
+    }
 
     // Slime chunk
     lines.get(11).value(slimeChunkString.trim());

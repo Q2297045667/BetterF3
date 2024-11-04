@@ -61,11 +61,14 @@ public class EntityModule extends BaseModule {
    */
   public void update(final Minecraft client) {
 
-    assert client.levelRenderer.level != null;
+    if (client.levelRenderer.level == null) {
+      return;
+    }
+
     final List<Component> entityValues =
     Arrays.asList(Utils.styledText(I18n.get("text.betterf3.line.rendered"), valueColor),
     Utils.styledText(I18n.get("text.betterf3.line.total"), this.totalColor),
-    Utils.styledText(client.levelRenderer.renderedEntities, valueColor),
+    Utils.styledText(client.levelRenderer.visibleEntityCount, valueColor),
     Utils.styledText(client.levelRenderer.level.getEntityCount(), this.totalColor));
 
     final IntegratedServer integratedServer = client.getSingleplayerServer();

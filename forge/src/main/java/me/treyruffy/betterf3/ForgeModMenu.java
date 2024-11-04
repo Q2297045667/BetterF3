@@ -15,9 +15,11 @@ public final class ForgeModMenu {
 
   /**
    * Registers BetterF3 in the mod menu.
+   *
+   * @param modLoadingContext the mod loading context
    */
-  public static void registerModsPage() {
-    ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
+  public static void registerModsPage(final ModLoadingContext modLoadingContext) {
+    modLoadingContext.registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
     () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> new ModConfigScreen(parent)));
   }
 }

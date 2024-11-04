@@ -1,5 +1,6 @@
 package me.treyruffy.betterf3.mixin;
 
+import java.util.ArrayList;
 import java.util.List;
 import me.cominixo.betterf3.config.GeneralOptions;
 import me.cominixo.betterf3.utils.DebugRenderer;
@@ -14,6 +15,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * Debug Lambda Mixin.
@@ -41,42 +43,67 @@ public abstract class ForgeDebugMixin {
   @Shadow protected abstract List<String> getSystemInformation();
 
   /**
-   * Renders the text on the left side of the screen.
+   * Renders the text on the screen.
    *
-   * @param context Draw Context
-   * @param ci Callback info
+   * @param guiGraphics the draw context
+   * @param list        the list of strings
+   * @param bl          the left side
+   * @param ci          the callback info
    */
-  @Inject(method = "drawGameInformation", at = @At("HEAD"), cancellable = true)
-  public void drawLeftText(final GuiGraphics context, final CallbackInfo ci) {
+  @Inject(method = "renderLines", at = @At(value = "HEAD"), cancellable = true, order = 2000)
+  public void drawText(final GuiGraphics guiGraphics, final List<String> list, final boolean bl, final CallbackInfo ci) {
 
     if (GeneralOptions.disableMod) {
       return;
     }
 
-    final List<Component> list = DebugRenderer.newText(this.minecraft, true, this.getGameInformation(), this.getSystemInformation());
-
-    DebugRenderer.drawLeftText(list, context, this.minecraft, this.font, null);
+    if (bl) {
+      final List<Component> leftList = DebugRenderer.newText(this.minecraft, true, this.getGameInformation(), this.getSystemInformation());
+      DebugRenderer.drawLeftText(leftList, guiGraphics, this.minecraft, this.font, list);
+    } else {
+      final List<Component> rightList = DebugRenderer.newText(this.minecraft, false, this.getGameInformation(), this.getSystemInformation());
+      DebugRenderer.drawRightText(rightList, guiGraphics, this.minecraft, this.font, list);
+    }
 
     ci.cancel();
   }
 
   /**
-   * Renders the text on the right side of the screen.
+   * Sets collect game information text to an empty list.
    *
-   * @param context Draw Context
-   * @param ci Callback info
+   * @param cir the callback info returnable
    */
-  @Inject(method = "drawSystemInformation", at = @At("HEAD"), cancellable = true)
-  public void drawRightText(final GuiGraphics context, final CallbackInfo ci) {
-
+  @Inject(method = "getGameInformation", at = @At("HEAD"), cancellable = true)
+  public void collectGameInformationText(final CallbackInfoReturnable<List<String>> cir) {
     if (GeneralOptions.disableMod) {
       return;
     }
+    cir.setReturnValue(new ArrayList<>());
+  }
 
-    final List<Component> list = DebugRenderer.newText(this.minecraft, false, this.getGameInformation(), this.getSystemInformation());
+  /**
+   * Sets collect system information text to an empty list.
+   *
+   * @param cir the callback info returnable
+   */
+  @Inject(method = "getSystemInformation", at = @At("HEAD"), cancellable = true)
+  public void collectSystemInformationText(final CallbackInfoReturnable<List<String>> cir) {
+    if (GeneralOptions.disableMod) {
+      return;
+    }
+    cir.setReturnValue(new ArrayList<>());
+  }
 
-    DebugRenderer.drawRightText(list, context, this.minecraft, this.font, null);
-
-    ci.cancel();
+  /**
+   * Sets overlay help text to an empty list.
+   *
+   * @param cir the callback info returnable
+   */
+  @Inject(method = "getOverlayHelp", at = @At("HEAD"), cancellable = true)
+  public void collectGetOverlayHelpText(final CallbackInfoReturnable<List<String>> cir) {
+    if (GeneralOptions.disableMod) {
+      return;
+    }
+    cir.setReturnValue(new ArrayList<>());
   }
 }
