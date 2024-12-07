@@ -12,5 +12,4 @@ pluginManagement {
 include("common") // Common directory
 include("fabric") // Fabric directory
 include("neoforge") // NeoForge directory
-include("forge") // Forge directory
 rootProject.name = 'BetterF3' // Sets project name

@@ -50,7 +50,7 @@ public class ModuleListWidget extends ObjectSelectionList<ModuleListWidget.Modul
    * @return the scrollbar position x
    */
   protected int scrollbarPositionX() {
-    return super.getScrollbarPosition() + 30;
+    return super.scrollBarX() + 30;
   }
 
   /**
@@ -117,8 +117,8 @@ public class ModuleListWidget extends ObjectSelectionList<ModuleListWidget.Modul
     this.moduleEntries.remove(entry);
     this.removeEntry(entry);
     this.modulesScreen.updateButtons();
-    if (this.getScrollAmount() > this.getMaxScroll()) {
-      this.setScrollAmount(this.getMaxScroll());
+    if (this.scrollAmount() > this.maxScrollAmount()) {
+      this.setScrollAmount(this.maxScrollAmount());
     }
     //BaseModule.modules.remove(index);
   }

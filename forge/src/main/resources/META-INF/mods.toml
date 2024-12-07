@@ -24,18 +24,18 @@ The creator would like to thank:
 [[dependencies.betterf3]]
 modId = "forge"
 mandatory = true
-versionRange = "[53,)"
+versionRange = "[54,)"
 ordering = "NONE"
 side = "CLIENT"
 
 [[dependencies.betterf3]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.21.2,)"
+versionRange = "[1.21.4,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.betterf3]]
 modId = "cloth_config"
-versionRange = "[16.0.0,)"
+versionRange = "[17.0.0,)"
 mandatory = true
