@@ -22,7 +22,7 @@
   "config.betterf3.shadow_text": "Тень текста",
   "config.betterf3.shadow_text.tooltip": "Добавить эффект тени к символам.",
   "config.betterf3.animations": "Анимация",
-  "config.betterf3.animations.tooltip": "Добавить анимацию при открытии/закрытии экрана отладки.",
+  "config.betterf3.animations.tooltip": "Добавляет анимацию при открытии/закрытии меню отладки.",
   "config.betterf3.animationSpeed": "Скорость анимации",
   "config.betterf3.animationSpeed.tooltip": "Установить скорость анимации.",
   "config.betterf3.debug_crosshair": "Скрыть координатные оси",
